@@ -1,0 +1,122 @@
+# Lichess Bot Configuration for ChessEngine
+# Place this in your lichess-bot directory as config.yml
+
+token: "your_lichess_bot_token_here"    # Get from https://lichess.org/account/oauth/token/create
+
+url: "https://lichess.org/"
+abort_time: 20
+fake_think_time: false
+rate_limiting_delay: 0
+move_overhead: 1000
+
+# Engine configuration
+engine:
+  dir: "./"                    # Path to your chess engine directory
+  name: "./chess_engine"       # Engine executable name
+  protocol: "uci"              # Use UCI protocol
+  ponder: true
+  polyglot:
+    enabled: false
+    book:
+      standard: # list of book file paths for variant standard
+        - "./books/performance.bin"  # PolyGlot book file
+        - "./books/human.bin"
+      atomic: # list of book file paths for variant atomic
+        - "./books/atomic.bin"
+      horde: # list of book file paths for variant horde  
+        - "./books/horde.bin"
+    max_depth: 8              # Half move max depth
+  
+  # UCI Options
+  uci_options:
+    Hash: 256                 # Hash table size in MB
+    Threads: 1               # Number of threads
+    BookPath: "./books/performance.bin"  # Opening book path
+    SyzygyPath: "./syzygy"   # Syzygy tablebase path (if available)
+
+# Time controls
+time_controls:
+  # Increment in seconds
+  increment: 2
+  
+  # Time left percentage to use for a move
+  time_percentage: 0.05
+  
+  # Minimum time per move in seconds  
+  min_time: 1
+  
+  # Maximum time per move in seconds
+  max_time: 60
+
+# Game acceptance criteria
+challenge:
+  concurrency: 1
+  sort_by: "best"
+  accept_bot: true
+  only_bot: false
+  max_increment: 180
+  min_increment: 0
+  max_base: 315360000  # 10 years
+  min_base: 0
+  variants:
+    - standard
+    # - fromPosition
+    # - antichess
+    # - atomic
+    # - chess960
+    # - horde
+    # - kingOfTheHill
+    # - racingKings
+    # - threeCheck
+  time_controls:
+    - bullet
+    - blitz
+    - rapid
+    - classical
+  modes:
+    - casual
+    - rated
+
+# Matchmaking - automatically challenge other bots
+matchmaking:
+  allow_matchmaking: false
+  challenge_variant: "random"
+  challenge_timeout: 30
+  challenge_initial_time: 60
+  challenge_increment: 3
+  challenge_days: 2
+  opponent_min_rating: 1000
+  opponent_max_rating: 3000
+  opponent_allow_tos_violation: false
+  opponent_rating_difference: 100
+  challenge_mode: "random"
+
+# Greeting messages
+greeting:
+  hello: "Hello! I'm ChessEngine, a C++ chess engine. Good luck and have fun!"
+  goodbye: "Thanks for the game! Feel free to challenge me again anytime."
+
+# Advanced options
+correspondence:
+  move_time: 300               # 5 minutes per move in correspondence
+  checkin_period: 600         # Check for new correspondence games every 10 minutes
+  disconnect_time: 150        # Disconnect after 2.5 minutes in correspondence
+  ponder: false               # Disable pondering in correspondence
+
+# Abort settings
+abort_time: 30                # Abort games with less than 30 seconds
+
+# Logging
+logging_level: INFO
+
+# Books directory structure:
+# books/
+# ├── performance.bin         # Strong opening book
+# ├── human.bin              # Human-like opening book  
+# ├── atomic.bin             # Atomic chess book
+# └── horde.bin              # Horde variant book
+
+# Syzygy tablebase directory structure:
+# syzygy/
+# ├── 3-4-5 piece tables/
+# └── 6-7 piece tables/ (if available)
